@@ -3,6 +3,7 @@ import { useState, useMemo, useRef } from "react";
 // =============================================================================
 // PROTÓTIPO INICIAL — Interface de perfil de preferências editável
 // Projeto Final I — Inconsistência em Sistemas de Recomendação
+// Layout alinhado ao wireframe (Balsamiq) da Seção 2.2 do relatório.
 // Dados de catálogo, histórico e pesos de preferência são fictícios (mockados).
 // =============================================================================
 
@@ -67,15 +68,15 @@ function motivosDoTopo(generos, interacoes, recomendado) {
   if (genero) {
     motivos.push({
       tipo: "genero",
-      label: "Gênero: " + genero.nome.toLowerCase(),
+      nomeGenero: genero.nome.toLowerCase(),
       detalhe: "peso " + genero.peso + " no seu perfil",
     });
   }
   if (interacaoBase) {
     motivos.push({
       tipo: "interacao",
-      label: "Similar a título assistido",
-      detalhe: interacaoBase.titulo + " (" + interacaoBase.progresso + "%)",
+      tituloBase: interacaoBase.titulo,
+      detalhe: interacaoBase.progresso + "% assistido",
       interacaoId: interacaoBase.id,
     });
   }
@@ -95,22 +96,23 @@ function rotuloPeso(peso) {
   return "alto";
 }
 
-// --- Paleta (tokens locais) ---
+// --- Paleta (tokens locais) — tema claro, próximo do wireframe original ---
 const C = {
-  bg: "#0E1116",
-  surface: "#171B22",
-  surfaceAlt: "#1D222B",
-  border: "#272D38",
-  borderSoft: "#1F2530",
-  text: "#EDEFF2",
-  textSecondary: "#9098A8",
+  bg: "#FFFFFF",
+  surface: "#FFFFFF",
+  surfaceAlt: "#F3F4F6",
+  border: "#1A1A1A",
+  borderSoft: "#D1D5DB",
+  text: "#111827",
+  textSecondary: "#4B5563",
   textTertiary: "#6B7280",
-  accent: "#E8A33D",
-  accentSoft: "#3A2E18",
-  accentText: "#F4C572",
-  danger: "#E2574C",
-  dangerSoft: "#341E1C",
-  dangerText: "#F2918A",
+  accent: "#2563EB",
+  accentSoft: "#DBEAFE",
+  accentText: "#1D4ED8",
+  danger: "#DC2626",
+  dangerSoft: "#FEE2E2",
+  dangerBorder: "#FCA5A5",
+  dangerText: "#B91C1C",
 };
 
 export default function PerfilPreferencias() {
@@ -141,38 +143,38 @@ export default function PerfilPreferencias() {
   }
 
   return (
-    <div style={{ background: C.bg, color: C.text, fontFamily: "Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif", borderRadius: 16, overflow: "hidden", maxWidth: 880, margin: "0 auto", border: "1px solid " + C.border }}>
+    <div style={{ background: C.bg, color: C.text, fontFamily: "Arial, Helvetica, sans-serif", borderRadius: 8, overflow: "hidden", maxWidth: 900, margin: "0 auto", border: "1px solid " + C.border }}>
 
       {/* Header */}
-      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "16px 24px", borderBottom: "1px solid " + C.border }}>
-        <div style={{ display: "flex", alignItems: "center", gap: 8, fontWeight: 700, fontSize: 15, letterSpacing: 0.2 }}>
-          <span style={{ width: 9, height: 9, borderRadius: 3, background: C.accent, display: "inline-block" }} />
-          StreamFlix
-        </div>
-        <div style={{ display: "flex", gap: 22, fontSize: 13, color: C.textSecondary }}>
-          <span>Início</span>
-          <span>Catálogo</span>
-          <span style={{ color: C.text, fontWeight: 500, borderBottom: "2px solid " + C.accent, paddingBottom: 14, marginBottom: -17 }}>Meu perfil</span>
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "18px 24px", borderBottom: "1px solid " + C.border }}>
+        <div style={{ fontWeight: 800, fontSize: 26, letterSpacing: -0.5 }}>StreamFlix</div>
+        <div style={{ display: "flex", gap: 26, fontSize: 15 }}>
+          <span style={{ color: C.text }}>Início</span>
+          <span style={{ color: C.text }}>Catálogo</span>
+          <span style={{ color: C.accent, fontWeight: 700, borderBottom: "2px solid " + C.accent, paddingBottom: 2 }}>Meu perfil</span>
         </div>
       </div>
 
-      <div style={{ padding: "22px 24px 26px" }}>
-        <h1 style={{ fontSize: 21, fontWeight: 600, margin: "0 0 4px" }}>Seu perfil de preferências</h1>
-        <p style={{ fontSize: 13, color: C.textSecondary, margin: "0 0 22px" }}>
+      <div style={{ padding: "24px 24px 28px" }}>
+        <h1 style={{ fontSize: 24, fontWeight: 700, margin: "0 0 4px" }}>Seu perfil de preferências</h1>
+        <p style={{ fontSize: 14, color: C.textSecondary, margin: "0 0 24px" }}>
           Visualize e edite o que influencia suas recomendações
         </p>
 
         {/* Grid principal */}
-        <div style={{ display: "grid", gridTemplateColumns: "minmax(0,1.15fr) minmax(0,1fr)", gap: 28 }}>
+        <div style={{ display: "grid", gridTemplateColumns: "minmax(0,1.15fr) auto minmax(0,1fr)", gap: 24 }}>
           {/* Coluna: gêneros */}
           <div>
-            <SectionLabel>Interesses por gênero</SectionLabel>
-            <div style={{ display: "flex", flexDirection: "column", gap: 16, marginTop: 14 }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline" }}>
+              <SectionLabel>Interesses por gênero</SectionLabel>
+              <span style={{ fontSize: 13, color: C.accent, fontWeight: 600, cursor: "default" }}>editar</span>
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 18, marginTop: 14 }}>
               {generos.map((g) => (
                 <div key={g.id}>
-                  <div style={{ display: "flex", justifyContent: "space-between", fontSize: 13, marginBottom: 6 }}>
+                  <div style={{ display: "flex", justifyContent: "space-between", fontSize: 14, marginBottom: 6 }}>
                     <label htmlFor={"s-" + g.id} style={{ color: C.text }}>{g.nome}</label>
-                    <span style={{ color: C.textTertiary, fontVariantNumeric: "tabular-nums" }}>{rotuloPeso(g.peso)}</span>
+                    <span style={{ color: C.textTertiary }}>{rotuloPeso(g.peso)}</span>
                   </div>
                   <input
                     id={"s-" + g.id}
@@ -193,9 +195,9 @@ export default function PerfilPreferencias() {
               ))}
             </div>
 
-            <div style={{ marginTop: 26 }}>
+            <div style={{ marginTop: 28 }}>
               <SectionLabel>Janela de histórico considerada</SectionLabel>
-              <div style={{ display: "flex", gap: 8, marginTop: 12, flexWrap: "wrap" }}>
+              <div style={{ display: "flex", gap: 10, marginTop: 12, flexWrap: "wrap" }}>
                 {JANELAS.map((j) => {
                   const active = janela === j.id;
                   return (
@@ -205,14 +207,13 @@ export default function PerfilPreferencias() {
                       onClick={() => { setJanela(j.id); sinalizar(); }}
                       aria-pressed={active}
                       style={{
-                        fontSize: 12.5,
-                        padding: "7px 13px",
-                        borderRadius: 8,
+                        fontSize: 14,
+                        padding: "8px 14px",
+                        borderRadius: 6,
                         cursor: "pointer",
                         border: "1px solid " + (active ? C.accent : C.border),
-                        background: active ? C.accentSoft : "transparent",
-                        color: active ? C.accentText : C.textSecondary,
-                        transition: "background 120ms, border-color 120ms",
+                        background: active ? C.accent : "#FFFFFF",
+                        color: active ? "#FFFFFF" : C.text,
                       }}
                     >
                       {j.label}
@@ -220,20 +221,20 @@ export default function PerfilPreferencias() {
                   );
                 })}
               </div>
-              <p style={{ fontSize: 12, color: C.textTertiary, marginTop: 10, lineHeight: 1.5 }}>
+              <p style={{ fontSize: 12.5, color: C.textTertiary, marginTop: 10, lineHeight: 1.5 }}>
                 Interações fora dessa janela deixam de influenciar suas recomendações.
               </p>
             </div>
           </div>
 
+          {/* Divisor vertical */}
+          <div style={{ width: 1, background: C.borderSoft }} />
+
           {/* Coluna: interações recentes */}
           <div>
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline" }}>
-              <SectionLabel>Interações recentes</SectionLabel>
-              <span style={{ fontSize: 11, color: C.textTertiary }}>marcar como não representativo</span>
-            </div>
+            <SectionLabel>Interações recentes</SectionLabel>
 
-            <div style={{ display: "flex", flexDirection: "column", gap: 8, marginTop: 14 }}>
+            <div style={{ display: "flex", flexDirection: "column", gap: 10, marginTop: 14 }}>
               {interacoes.map((it) => {
                 const suspeitaAtiva = it.suspeita && !it.desconsiderada;
                 return (
@@ -242,44 +243,44 @@ export default function PerfilPreferencias() {
                     style={{
                       display: "flex",
                       alignItems: "center",
-                      gap: 10,
-                      padding: 10,
-                      borderRadius: 10,
-                      border: "1px solid " + (suspeitaAtiva ? "#5A2E29" : C.border),
-                      background: suspeitaAtiva ? C.dangerSoft : C.surface,
-                      opacity: it.desconsiderada ? 0.5 : 1,
-                      transition: "opacity 150ms",
+                      gap: 12,
+                      padding: 12,
+                      borderRadius: 8,
+                      border: "1px solid " + (suspeitaAtiva ? C.danger : C.border),
+                      background: suspeitaAtiva ? C.dangerSoft : "#FFFFFF",
+                      opacity: it.desconsiderada ? 0.55 : 1,
                     }}
                   >
-                    <div style={{ width: 34, height: 44, borderRadius: 6, background: C.surfaceAlt, flexShrink: 0 }} />
+                    <div style={{ width: 36, height: 46, borderRadius: 4, background: C.surfaceAlt, flexShrink: 0 }} />
                     <div style={{ flex: 1, minWidth: 0 }}>
                       <p style={{
-                        fontSize: 12.5, fontWeight: 500, margin: 0,
+                        fontSize: 14, fontWeight: 700, margin: 0,
                         textDecoration: it.desconsiderada ? "line-through" : "none",
                         whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis",
                       }}>
                         {it.titulo}
                       </p>
-                      <p style={{ fontSize: 11, margin: "2px 0 0", color: it.desconsiderada ? C.textTertiary : suspeitaAtiva ? C.dangerText : C.textSecondary }}>
-                        {it.desconsiderada ? "não considerado no perfil" : suspeitaAtiva ? "padrão fora do habitual — confirmar?" : "assistido " + it.progresso + "%"}
+                      <p style={{ fontSize: 12.5, margin: "2px 0 0", color: it.desconsiderada ? C.textTertiary : suspeitaAtiva ? C.dangerText : C.textSecondary }}>
+                        {it.desconsiderada ? "não considerado" : suspeitaAtiva ? "assistido por outra pessoa?" : "assistido " + it.progresso + "%"}
                       </p>
                     </div>
                     <button
                       type="button"
                       onClick={() => alternarDesconsiderar(it.id)}
+                      aria-label={it.desconsiderada ? "restaurar interação" : "marcar como não representativa"}
                       style={{
-                        fontSize: 11,
-                        padding: "6px 10px",
-                        borderRadius: 7,
-                        border: "1px solid " + C.border,
+                        fontSize: it.desconsiderada ? 13 : 16,
+                        fontWeight: 700,
+                        padding: it.desconsiderada ? "5px 10px" : "2px 9px",
+                        borderRadius: 6,
+                        border: "none",
                         background: "transparent",
-                        color: C.textSecondary,
+                        color: it.desconsiderada ? C.accent : C.textSecondary,
                         cursor: "pointer",
                         flexShrink: 0,
-                        whiteSpace: "nowrap",
                       }}
                     >
-                      {it.desconsiderada ? "restaurar" : "não foi eu"}
+                      {it.desconsiderada ? "restaurar" : "\u00D7"}
                     </button>
                   </div>
                 );
@@ -291,72 +292,64 @@ export default function PerfilPreferencias() {
         {/* Transparência: por que recomendamos */}
         <div
           style={{
-            marginTop: 28,
+            marginTop: 30,
             paddingTop: 22,
             borderTop: "1px solid " + C.border,
             transition: "background-color 200ms",
-            background: pulse ? "rgba(232,163,61,0.05)" : "transparent",
-            borderRadius: 10,
+            background: pulse ? C.accentSoft : "transparent",
+            borderRadius: 8,
           }}
         >
           <div style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between", marginBottom: 14 }}>
             <SectionLabel>Por que recomendamos isso?</SectionLabel>
-            {principal && <span style={{ fontSize: 13, fontWeight: 500, color: C.text }}>{principal.titulo}</span>}
+            {principal && <span style={{ fontSize: 13, color: C.textSecondary }}>{principal.titulo}</span>}
           </div>
 
           {principal ? (
-            <div style={{ display: "flex", gap: 20, flexWrap: "wrap" }}>
-              <div style={{
-                minWidth: 92, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
-                background: C.surface, border: "1px solid " + C.border, borderRadius: 12, padding: "14px 10px",
-              }}>
-                <span style={{ fontSize: 24, fontWeight: 600, color: C.accentText, fontVariantNumeric: "tabular-nums" }}>{principal.score}%</span>
-                <span style={{ fontSize: 11, color: C.textTertiary, marginTop: 2 }}>compatível</span>
-              </div>
-
-              <div style={{ flex: 1, minWidth: 220, display: "flex", flexDirection: "column", gap: 8 }}>
-                {motivos.map((m, idx) => (
-                  <div key={idx} style={{
-                    display: "flex", alignItems: "center", justifyContent: "space-between", gap: 10,
-                    padding: "9px 12px", borderRadius: 8, background: C.surface, border: "1px solid " + C.borderSoft,
-                  }}>
-                    <div style={{ display: "flex", flexDirection: "column", gap: 1, minWidth: 0 }}>
-                      <span style={{ fontSize: 12.5, fontWeight: 500 }}>{m.label}</span>
-                      <span style={{ fontSize: 11, color: C.textSecondary }}>{m.detalhe}</span>
-                    </div>
-                    {m.tipo === "interacao" && (
-                      <button
-                        type="button"
-                        onClick={() => alternarDesconsiderar(m.interacaoId)}
-                        style={{
-                          fontSize: 11, padding: "6px 10px", borderRadius: 7, flexShrink: 0,
-                          border: "1px solid #5A2E29", background: "transparent", color: C.dangerText, cursor: "pointer",
-                          whiteSpace: "nowrap",
-                        }}
-                      >
-                        não foi eu — corrigir
-                      </button>
-                    )}
-                  </div>
-                ))}
-              </div>
+            <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
+              {motivos.map((m, idx) => (
+                <div key={idx} style={{
+                  display: "flex", alignItems: "center", gap: 8,
+                  padding: "10px 14px", borderRadius: 6, background: C.surfaceAlt, border: "1px solid " + C.borderSoft,
+                  fontSize: 13.5, color: C.text,
+                }}>
+                  {m.tipo === "genero" && <span>{principal.score}% por gênero: {m.nomeGenero}</span>}
+                  {m.tipo === "interacao" && <span>similar à &quot;{m.tituloBase}&quot;</span>}
+                  {m.tipo === "tendencia" && <span>tendência entre usuários parecidos</span>}
+                  {m.tipo === "interacao" && (
+                    <button
+                      type="button"
+                      onClick={() => alternarDesconsiderar(m.interacaoId)}
+                      style={{
+                        fontSize: 12.5, fontWeight: 600, border: "none", background: "transparent",
+                        color: C.danger, cursor: "pointer", padding: 0, marginLeft: 2,
+                      }}
+                    >
+                      corrigir
+                    </button>
+                  )}
+                </div>
+              ))}
             </div>
           ) : (
-            <p style={{ fontSize: 12.5, color: C.textTertiary }}>Ajuste seus interesses para gerar uma recomendação.</p>
+            <p style={{ fontSize: 13.5, color: C.textTertiary }}>Ajuste seus interesses para gerar uma recomendação.</p>
           )}
 
           {recomendacoes.length > 1 && (
-            <div style={{ marginTop: 16, display: "flex", gap: 10, flexWrap: "wrap" }}>
-              {recomendacoes.slice(1).map((r) => (
-                <div key={r.titulo} style={{
-                  display: "flex", alignItems: "center", gap: 8, fontSize: 11.5,
-                  background: C.surface, border: "1px solid " + C.borderSoft, borderRadius: 999, padding: "6px 12px",
-                  color: C.textSecondary,
-                }}>
-                  <span>{r.titulo}</span>
-                  <span style={{ color: C.textTertiary }}>{r.score}%</span>
-                </div>
-              ))}
+            <div style={{ marginTop: 18 }}>
+              <span style={{ fontSize: 12, color: C.textTertiary }}>outras sugestões: </span>
+              <div style={{ marginTop: 8, display: "flex", gap: 8, flexWrap: "wrap" }}>
+                {recomendacoes.slice(1).map((r) => (
+                  <div key={r.titulo} style={{
+                    display: "flex", alignItems: "center", gap: 6, fontSize: 12.5,
+                    background: "#FFFFFF", border: "1px solid " + C.borderSoft, borderRadius: 6, padding: "5px 10px",
+                    color: C.textSecondary,
+                  }}>
+                    <span>{r.titulo}</span>
+                    <span style={{ color: C.textTertiary }}>{r.score}%</span>
+                  </div>
+                ))}
+              </div>
             </div>
           )}
         </div>
@@ -367,7 +360,7 @@ export default function PerfilPreferencias() {
 
 function SectionLabel({ children }) {
   return (
-    <h2 style={{ fontSize: 12, fontWeight: 600, textTransform: "uppercase", letterSpacing: 0.6, color: "#9098A8", margin: 0 }}>
+    <h2 style={{ fontSize: 15.5, fontWeight: 700, color: "#111827", margin: 0 }}>
       {children}
     </h2>
   );
